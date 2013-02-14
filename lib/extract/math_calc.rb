@@ -6,7 +6,7 @@ module Extract
     attr_accessor :str
 
     def left_associative?
-      false
+      true
     end
     def operator?
       %w(+ - / *).include?(str)
@@ -16,11 +16,11 @@ module Extract
       h[str]
     end
     def apply(l,r)
-      puts "apply call #{l} #{str} #{r}"
+      #puts "apply call #{l} #{str} #{r}"
       raise "bad apply" unless operator?
       raise "bad apply" unless l && r
       exp = "#{l.to_s} #{str} #{r.to_s}"
-      puts "evaling #{exp}"
+      #puts "evaling #{exp}"
       eval(exp)
     end
     def to_s
@@ -78,7 +78,7 @@ module Extract
       input = input.map { |x| MathWrapper.new(:str => x.text_value) }
       #input = input.split(" ") if input.kind_of?(String)
       res = shunting_yard(input)
-      puts "before rpn #{res.inspect}"
+      #puts "before rpn #{res.inspect}"
       res = rpn(res)
     end
 

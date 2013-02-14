@@ -25,6 +25,11 @@ module Extract
       end
 
       def tokens(start=self)
+        if start.respond_to?("paren?")
+          res = start.math_exp.eval
+          return [OpenStruct.new(:text_value => res.to_s)]
+          #return [start.exp.eval]
+        end
         #puts "parsing #{start.text_value} #{start.class}"
         res = []
 
@@ -51,6 +56,14 @@ module Extract
       def eval
         #raise tokens.map { |x| x.text_value }.inspect + "\n" + inspect
         MathCalc.parse_eval(tokens)
+      end
+    end
+
+    module ParenMath
+      include Math
+
+      def paren?
+        true
       end
     end
   end

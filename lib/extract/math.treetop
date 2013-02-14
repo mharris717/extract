@@ -1,7 +1,21 @@
 grammar Math
   rule top
-    num (op top)* <Extract::Tree::Math>
+    math_exp
   end
+
+  rule naked_exp
+    primary (op math_exp)* <Extract::Tree::Math>
+  end
+
+  rule paren_exp
+    "(" math_exp ")" <Extract::Tree::ParenMath> 
+  end
+
+  rule math_exp 
+    (paren_exp / naked_exp) (op math_exp)* <Extract::Tree::Math>
+  end
+
+
 
   rule num
     [0-9]+ <Extract::Tree::Num>
@@ -10,4 +24,9 @@ grammar Math
   rule op
     ("+" / "-" / "*" / "/") <Extract::Tree::Operator>
   end
+
+  rule primary
+    num
+  end
 end
+
