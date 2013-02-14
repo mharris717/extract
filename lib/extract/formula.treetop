@@ -1,0 +1,77 @@
+grammar Formula
+  rule top
+    "=" meat:(cond / formula / range / math / cell / num)
+  end
+
+  rule calc_unit
+    formula / cell / math
+  end
+
+  rule math_arg_naked
+    formula / cell / num
+  end
+
+  rule math_arg_paren
+    "(" math_arg ")"
+  end
+
+  rule math_arg
+    math_arg_paren / math_arg_naked
+  end
+
+  rule math_op
+    "+" / "*" / "/" / "-"
+  end
+
+  rule math
+    math_arg rest:(math_op math_arg)+ <Extract::Tree::Math>
+  end
+
+  rule cell
+    c:[A-Z]+ r:[0-9]+ <Cell>
+  end
+
+  rule range
+    a:cell ":" b:cell <Extract::Tree::Range>
+  end
+
+  rule cell_or_range
+    range / cell
+  end
+
+  rule num
+    [0-9]+ <Num>
+  end
+
+  rule formula
+    formula_name "(" formula_args ")" <Formula>
+  end 
+
+  rule formula_name
+    "THING" / "DOUBLE" / "SUM" / "IF" / "MAX" / "VLOOKUP"
+  end
+
+  rule formula_arg
+    cond / formula / range / cell / num
+  end
+
+  rule formula_args
+    formula_arg rest:("," fa:formula_arg)* <Extract::Tree::FormulaArgs>
+  end
+
+  rule cond_exp
+    a:(num / cell) op:("=" / ">") b:(num / cell) <Extract::Tree::CondExp>
+  end
+
+  rule cond_const
+    ("TRUE" / "FALSE") {
+      def excel_value
+        (text_value == "TRUE") ? true : false
+      end
+    }
+  end
+
+  rule cond
+    cond_exp / cond_const
+  end
+end

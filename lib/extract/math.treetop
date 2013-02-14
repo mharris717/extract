@@ -1,0 +1,13 @@
+grammar Math
+  rule top
+    ("(" top ")") / exp
+  end
+
+  rule exp
+    [0-9]+ (op top)*
+  end
+
+  rule op
+    "+" / "-" / "*" / "/"
+  end
+end
