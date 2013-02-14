@@ -1,13 +1,13 @@
 grammar Math
   rule top
-    ("(" top ")") / exp
+    num (op top)* <Extract::Tree::Math>
   end
 
-  rule exp
-    [0-9]+ (op top)*
+  rule num
+    [0-9]+ <Extract::Tree::Num>
   end
 
   rule op
-    "+" / "-" / "*" / "/"
+    ("+" / "-" / "*" / "/") <Extract::Tree::Operator>
   end
 end

@@ -15,10 +15,10 @@ class Object
   end
 end
 
-%w(parser sheet).each do |f|
+%w(parser sheet excel_formulas math_calc).each do |f|
   load File.expand_path(File.dirname(__FILE__)) + "/extract/#{f}.rb"
 end
 
-%w(base range cond_exp formula formula_args math num).each do |f|
+%w(base range cond_exp formula formula_args math num cell operator).each do |f|
   load File.expand_path(File.dirname(__FILE__)) + "/extract/tree/#{f}.rb"
 end

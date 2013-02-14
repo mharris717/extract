@@ -28,7 +28,7 @@ grammar Formula
   end
 
   rule cell
-    c:[A-Z]+ r:[0-9]+ <Cell>
+    c:[A-Z]+ r:[0-9]+ <Extract::Tree::Cell>
   end
 
   rule range
@@ -44,7 +44,7 @@ grammar Formula
   end
 
   rule formula
-    formula_name "(" formula_args ")" <Formula>
+    formula_name "(" formula_args ")" <Extract::Tree::Formula>
   end 
 
   rule formula_name
