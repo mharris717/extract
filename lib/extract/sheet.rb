@@ -8,6 +8,7 @@ module Extract
     end
     def [](c)
       res = cells[c]
+      puts "doing #{c} #{res}"
       if res.to_s =~ /^=/
         Extract::Parser.new(:str => res, :sheet => self).excel_value
       else
@@ -40,9 +41,9 @@ module Extract
         sheet = Extract::Sheet.new
 
         ("A".."Z").each do |col|
-          (1..50).each do |row|
+          (1..100).each do |row|
             val = if w.formula?(row,col)
-              "=" + w.formula(row,col)
+              "=" + w.formula(row,col).gsub(" ","")
             else
               w.cell(row,col)
             end

@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 def should_have_deps(cell,*deps)
-  it "thing" do
+  it "#{cell} should have deps #{deps.inspect}" do
     if cell =~ /^=/
       sheet["X99"] = cell
       sheet.deps("X99").uniq.sort.should == deps.flatten.select { |x| x }.sort
@@ -34,6 +34,7 @@ describe "Deps" do
   should_have_deps "E1","A1"
 
   should_have_deps "F1","A1","A2"
+
   should_have_deps "=A1+4","A1"
 
   should_have_deps "=A1 = A2","A1","A2"

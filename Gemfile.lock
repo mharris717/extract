@@ -44,6 +44,7 @@ GEM
       method_source (~> 0.8)
       slop (~> 3.4)
     rake (10.0.3)
+    rb-fsevent (0.9.1)
     rdoc (3.12.1)
       json (~> 1.4)
     roo (1.10.2)
@@ -82,6 +83,7 @@ DEPENDENCIES
   jeweler (~> 1.8.4)
   lre
   mharris_ext
+  rb-fsevent (~> 0.9.1)
   rdoc (~> 3.12)
   roo
   rspec (~> 2.8.0)

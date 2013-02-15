@@ -8,8 +8,15 @@ end
 
 def should_parse_to(str,val)
   it "#{str} parses to #{val}" do
-    res = Extract::Parser.new(:str => str, :sheet => sheet).excel_value
-    res.should == val
+    result = Extract::Parser.new(:str => str, :sheet => sheet).result
+    begin
+      res = Extract::Parser.new(:str => str, :sheet => sheet).excel_value
+      #puts result.inspect unless res == val
+      res.should == val
+    rescue => exp
+      puts result.inspect
+      raise exp
+    end
   end
 end
 
@@ -59,7 +66,15 @@ describe "Extract" do
   should_parse_to "=SUM(A1,A2,A2)",5
 
   should_parse_to "=3 + 4",7
+  should_parse_to "=3 + 4 + 5",12
+
+
+  should_parse "= 3 + 4 + A2"
+  
+
   should_parse_to "=3 + 4 + A2",9
+  
+
   should_parse_to "=3 + A2 + 4",9
   should_parse_to "=3 + DOUBLE(5)",13
 
@@ -89,5 +104,9 @@ describe "Extract" do
 
   should_parse_to "=A1:B2",[[1,4],[2,5]]
 
+  should_parse_to "=-2 * -3",6
+  should_parse_to "=-2 * A2",-4
+  should_parse_to "=A2 * -2",-4
 
+  should_parse_to "=-A2",-2
 end

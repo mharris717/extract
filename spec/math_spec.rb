@@ -4,7 +4,7 @@ def should_parse_math(str,val=nil)
   it "math parse #{str}" do
     old_str = str
     str = str.gsub(" ","")#.gsub(/[\(\)]/,"")
-    res = MathParser.new.parse(str)
+    res = MathMyParser.new.parse(str)
     #puts res.inspect
 
     res.should be
@@ -13,7 +13,7 @@ def should_parse_math(str,val=nil)
         res.eval.should == val 
       else
         raise res.inspect unless res.respond_to?(:eval)
-        res.eval.to_s.should == eval(old_str).to_s
+        res.eval.to_f.should == eval(old_str).to_f
       end
     end
   end
@@ -26,20 +26,22 @@ end
 describe "Math" do
   should_parse_math "23 + 45 + 67 + 89"
 
-  if true
-    should_parse_math "(2)"
-    should_parse_math "2+3"
-    should_parse_math "2 + (3)"
-    should_parse_math "(2 + 3)"
-    should_parse_math "(2 + (3 + 4))"
+  #should_parse_math "(2)"
+  should_parse_math "2+3"
+  should_parse_math "2 + (3 + 4)"
+  should_parse_math "(2 + 3) + 4"
+  should_parse_math "(2 + (3 + 4)) + 5"
 
-    should_parse_math "3 + 4 * 5"
-    should_parse_math "3 * 4 + 5"
+  should_parse_math "3 + 4 * 5"
+  should_parse_math "3 * 4 + 5"
 
     
-  end
 
   should_parse_math "(3 + 4) * 5"
+
+  should_parse_math "1.5 + 2.4"
+
+  should_parse_math "-2 + -3"
 end
 
 describe "Math" do

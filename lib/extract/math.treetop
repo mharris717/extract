@@ -1,10 +1,10 @@
-grammar Math
-  rule top
-    math_exp
+grammar MathMy
+  rule math_exp_full
+    (paren_exp / primary) rest:(op math_exp)+ <Extract::Tree::Math>
   end
 
   rule naked_exp
-    primary (op math_exp)* <Extract::Tree::Math>
+    primary rest:(op math_exp)* <Extract::Tree::Math>
   end
 
   rule paren_exp
@@ -12,13 +12,14 @@ grammar Math
   end
 
   rule math_exp 
-    (paren_exp / naked_exp) (op math_exp)* <Extract::Tree::Math>
+    (paren_exp / naked_exp) rest:(op math_exp)* <Extract::Tree::Math>
   end
 
 
 
+
   rule num
-    [0-9]+ <Extract::Tree::Num>
+    "-"? [0-9]+ ("." [0-9]+)? <Extract::Tree::Num>
   end
 
   rule op

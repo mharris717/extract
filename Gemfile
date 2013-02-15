@@ -22,3 +22,5 @@ gem 'treetop'
 
 gem 'lre'
 gem 'roo'
+
+gem 'rb-fsevent', '~> 0.9.1'

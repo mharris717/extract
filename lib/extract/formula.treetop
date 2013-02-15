@@ -1,34 +1,20 @@
 grammar Formula
+  include MathMy
+
   rule top
-    "=" meat:(cond / formula / range / math / cell / num)
+    "=" meat:(cond / formula / range / math_exp_full / cell / num)
+  end
+
+  rule primary
+    num / cell / formula
   end
 
   rule calc_unit
-    formula / cell / math
-  end
-
-  rule math_arg_naked
-    formula / cell / num
-  end
-
-  rule math_arg_paren
-    "(" math_arg ")"
-  end
-
-  rule math_arg
-    math_arg_paren / math_arg_naked
-  end
-
-  rule math_op
-    "+" / "*" / "/" / "-"
-  end
-
-  rule math
-    math_arg rest:(math_op math_arg)+ <Extract::Tree::Math>
+    formula  / cell
   end
 
   rule cell
-    c:[A-Z]+ r:[0-9]+ <Extract::Tree::Cell>
+    "-"? c:[A-Z] r:[0-9]+ <Extract::Tree::Cell>
   end
 
   rule range
@@ -40,8 +26,9 @@ grammar Formula
   end
 
   rule num
-    [0-9]+ <Num>
+    "-"? [0-9]+ ("." [0-9]+)? <Extract::Tree::Num>
   end
+
 
   rule formula
     formula_name "(" formula_args ")" <Extract::Tree::Formula>

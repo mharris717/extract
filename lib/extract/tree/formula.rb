@@ -6,7 +6,11 @@ module Extract
         ExcelFormulas.send(formula_name.text_value.downcase,*args)
       end
       def deps
+        #raise "foo"
         formula_args.deps
+      end
+      def tt
+        :formula
       end
     end
   end

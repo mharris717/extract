@@ -17,11 +17,19 @@ module Extract
     end
     def apply(l,r)
       #puts "apply call #{l} #{str} #{r}"
-      raise "bad apply" unless operator?
-      raise "bad apply" unless l && r
+      raise "bad apply, not an operator" unless operator?
+      
+      #raise "bad apply, L #{l} R #{r}" unless l.to_s.present? && r.to_s.present?  
+
+      l.str = "0" if l.respond_to?(:str) && l.str.blank?
+      r.str = "0" if r.respond_to?(:str) && r.str.blank?
+
       exp = "#{l.to_s} #{str} #{r.to_s}"
       #puts "evaling #{exp}"
-      eval(exp)
+        #puts "eval, L #{l.class} #{l.inspect} #{str} R #{r.inspect}"
+      res = eval(exp)
+      puts "evaled #{exp} to #{res}"
+      res
     end
     def to_s
       str
@@ -74,12 +82,19 @@ module Extract
     end
 
     def parse_eval(input)
+      raw_input = input
       #raise input.map { |x| x.text_value }.inspect
-      input = input.map { |x| MathWrapper.new(:str => x.text_value) }
+      input = input.map { |x| MathWrapper.new(:str => (x.respond_to?(:excel_value) ? x.excel_value : x.text_value)) }
       #input = input.split(" ") if input.kind_of?(String)
       res = shunting_yard(input)
       #puts "before rpn #{res.inspect}"
-      res = rpn(res)
+      begin
+        res = rpn(res)
+      rescue => exp
+        puts raw_input.map { |x| x.text_value }.inspect
+        puts res.inspect
+        raise exp
+      end
     end
 
     class << self

@@ -1,5 +1,13 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
+def should_eval_to(formula,val)
+  it "thing" do
+
+    sheet["Z99"] = formula
+    sheet["Z99"].should == val
+  end
+end
+
 describe "Sheet" do
   let(:sheet) do
     res = Extract::Sheet.new
@@ -34,6 +42,10 @@ describe "Sheet" do
     sheet['B1'] = 99
     sheet['B3'].should == 5
   end
+
+  should_eval_to "=2 + 3",5
+  should_eval_to "=B1 + 2",3
+  #should_eval_to "=-1*B1",-1
 
   
 end

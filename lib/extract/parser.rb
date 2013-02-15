@@ -1,5 +1,18 @@
-Treetop.load "lib/extract/formula"
+
 Treetop.load "lib/extract/math"
+Treetop.load "lib/extract/formula"
+
+{:math => "MathMy", :formula => "Formula"}.each do |f,c|
+  Treetop.load "lib/extract/#{f}"
+  Object.send(:remove_const,"#{c}Parser")
+end
+
+{:math => "MathMy", :formula => "Formula"}.each do |f,c|
+  Treetop.load "lib/extract/#{f}"
+end
+
+
+
 
 class Object
   attr_accessor :root_sheet
@@ -22,7 +35,16 @@ module Extract
 
     def result
       p = FormulaParser.new
-      p.parse(str.gsub(" ",""))
+      res = p.parse(str.gsub(" ",""))
+      if !res
+        strs = []
+        strs << p.failure_reason
+        strs << p.failure_line
+        strs << p.failure_column
+        strs << "no result for #{str}"
+        raise strs.join("\n")
+      end
+      res
     end
 
     def excel_value
@@ -36,6 +58,7 @@ module Extract
       res = result
       res.root_sheet = sheet
       #raise res.meat.inspect unless res.meat.respond_to?(:deps)
+      raise "can't parse #{str}" unless res
       res.meat.deps
     end
   end

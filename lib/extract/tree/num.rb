@@ -2,7 +2,7 @@ module Extract
   module Tree
     module Num
       def excel_value
-        text_value.to_i
+        text_value.to_f
       end
       def deps
         []

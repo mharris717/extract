@@ -1,27 +1,58 @@
 module Extract
   module Tree
     module Math
+      def get_math_exp
+        if respond_to?(:math_exp)
+          math_exp
+        elsif respond_to?(:math_exp_full)
+          math_exp_full
+        elsif respond_to?(:num)
+          num
+        elsif respond_to?(:primary)
+          primary
+        else
+          nil
+        end
+      end
       def excel_value
-        res = math_arg.excel_value
+        return eval
+        raise 'foo'
+        unless get_math_exp
+          str = %w(math_exp naked_exp cell).map { |x| "#{x} #{respond_to?(x)}" }.join(", ")
+          #raise str + "\n" + inspect
+          #raise (methods - 7.methods).inspect + "\n" + inspect
+        end
+
+
+        res = 0
+        #res = math_exp.excel_value if respond_to?(:math_exp)
 
         rest.elements.each do |e|
-          arg = e.elements[1]
-          res += arg.excel_value
+          #arg = e.elements[1]
+          #res += arg.excel_value
+          #res += 
         end
 
         res
       end
 
-      def deps
+      def deps(start=self)
         res = []
-        res << math_arg.deps
+        #res << get_math_exp.deps
 
-        rest.elements.each do |e|
-          arg = e.elements[1]
-          res << arg.deps
+        return [] unless start.elements
+
+        start.elements.each do |e|
+          #arg = e.elements[1]
+          if e.respond_to?(:deps)
+            res << e.deps 
+          else
+            res << deps(e)
+          end
         end
 
         res.flatten.select { |x| x }
+
       end
 
       def tokens(start=self)
@@ -41,6 +72,10 @@ module Extract
               res << el
             elsif t == :operator
               res << el
+            elsif t == :cell
+              res << el
+            elsif t == :formula
+              res << el
             elsif t == :math
               res += el.tokens
             else
@@ -54,6 +89,7 @@ module Extract
       end
 
       def eval
+        #puts "evaling #{text_value}"
         #raise tokens.map { |x| x.text_value }.inspect + "\n" + inspect
         MathCalc.parse_eval(tokens)
       end
