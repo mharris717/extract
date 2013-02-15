@@ -9,10 +9,10 @@ module Extract
       true
     end
     def operator?
-      %w(+ - / *).include?(str)
+      %w(+ - / * ^).include?(str)
     end
     def precedence
-      h = {"*" => 10, "/" => 10, "+" => 5, "-" => 5}
+      h = {"*" => 10, "/" => 10, "+" => 5, "-" => 5, "^" => 15}
       h[str]
     end
     def apply(l,r)
@@ -24,9 +24,14 @@ module Extract
       l.str = "0" if l.respond_to?(:str) && l.str.blank?
       r.str = "0" if r.respond_to?(:str) && r.str.blank?
 
-      exp = "#{l.to_s} #{str} #{r.to_s}"
+      op = str
+      op = "**" if op == "^"
+
+      exp = "#{l.to_s} #{op} #{r.to_s}"
+      return 0 if exp =~ /infinity/i || exp =~ /[a-z]/i
       #puts "evaling #{exp}"
         #puts "eval, L #{l.class} #{l.inspect} #{str} R #{r.inspect}"
+      raise exp if exp =~ /[a-z]/i
       res = eval(exp)
       puts "evaled #{exp} to #{res}"
       res

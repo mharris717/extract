@@ -7,7 +7,9 @@ module Extract
       args.flatten.inject(0) { |s,i| s + (i || 0) }
     end
     def if(c,a,b)
-      c ? a : b
+      res = c ? a : b
+      puts [c,a,b].inspect
+      res
     end
     def max(*args)
       args.flatten.select { |x| x }.sort.reverse.first
@@ -19,6 +21,18 @@ module Extract
         end
       end
       nil
+    end
+    def sqrt(num)
+      if num.present?
+        (num.to_f) ** 0.5
+      else
+        nil
+      end
+    end
+
+    def combin(n,k)
+      puts "combin #{n} #{k}"
+      n.fact / (k.fact * (n-k).fact)
     end
 
     class << self

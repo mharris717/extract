@@ -2,7 +2,13 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 def should_parse(str)
   it "#{str} parses" do
-    str.should parse
+    begin
+      str.should parse
+    rescue => exp
+      res = FormulaParser.new().parse(str, :consume_all_input => false)
+      raise res.inspect
+      raise exp
+    end
   end
 end
 
@@ -109,4 +115,31 @@ describe "Extract" do
   should_parse_to "=A2 * -2",-4
 
   should_parse_to "=-A2",-2
+
+  should_parse_to "=DOUBLE(3 * 4)",24 
+
+  should_parse_to '="abc"="abc"',true
+  should_parse_to '="abc"="abd"',false
+  should_parse_to "=DOUBLE(2)=4",true
+  should_parse_to "=DOUBLE(2)=5",false
+  should_parse_to "=(2+3)*2=10",true
+  should_parse_to "=(2+3)*2=11",false
+  #should_parse_to '=A1="N/A'
+
+  should_parse_to '=IF(A1="N/A",0,A1*A2)',2
+
+  should_parse_to "=$A1 + A2",3
+
+  should_parse_to "=3^2",9
+  should_parse_to "=IF(A1<=$A$2,3,4)",3
+
+  should_parse_to "=COMBIN($A$2*2,A1*2)",6
+  should_parse "=COMBIN(A2,A1)*B3"
+  should_parse "=COMBIN($A$2,A1)*$B$31^C35"
+  should_parse '=IF(C35<=$B$30,COMBIN($B$30,C35)*$B$31^C35*(1-$B$31)^($B$30-C35),17)'
+  should_parse '=IF(C35<=$B$30,COMBIN($B$30,C35)*$B$31^C35*(1-$B$31)^($B$30-C35),"abc")'
+  #should_parse_to "=COMBIN($A$2,A1)*$B$31^C35*(1-$B$31)^($B$30-C35)",99
+
+  should_parse_to '=IF(2<1,14,"N/A")',"N/A"
+  should_parse_to '=IF(2<3,"ABC","N/A")',"ABC"
 end

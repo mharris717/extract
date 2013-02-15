@@ -1,0 +1,27 @@
+%form{:action => "/"}
+  %table
+    %tr
+      %th Cell
+      %th Name
+      %th Val
+
+    - @sheet.each_input do |cell,name,val|
+      %tr
+        %td= cell
+        %td= name
+        %td
+          %input{:type => "text", :name => "input[#{cell}]", :value => val}
+    
+    %tr
+      %td _
+
+    - @sheet.each_output do |cell,name,val|
+      %tr
+        %td= cell
+        %td= name
+        %td= val
+
+  %input{:type => "Submit"}
+
+
+  

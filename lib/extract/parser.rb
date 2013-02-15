@@ -1,14 +1,16 @@
 
-Treetop.load "lib/extract/math"
-Treetop.load "lib/extract/formula"
+
+#Treetop.load "lib/extract/math"
+#Treetop.load "lib/extract/formula"
 
 {:math => "MathMy", :formula => "Formula"}.each do |f,c|
-  Treetop.load "lib/extract/#{f}"
-  Object.send(:remove_const,"#{c}Parser")
+  f = File.expand_path(File.dirname(__FILE__)) + "/#{f}"
+  Treetop.load f
+  #Object.send(:remove_const,"#{c}Parser")
 end
 
 {:math => "MathMy", :formula => "Formula"}.each do |f,c|
-  Treetop.load "lib/extract/#{f}"
+  #Treetop.load "lib/extract/#{f}"
 end
 
 

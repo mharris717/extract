@@ -13,7 +13,7 @@ def should_parse_math(str,val=nil)
         res.eval.should == val 
       else
         raise res.inspect unless res.respond_to?(:eval)
-        res.eval.to_f.should == eval(old_str).to_f
+        res.eval.to_f.should == eval(old_str.gsub("^","**")).to_f
       end
     end
   end
@@ -42,6 +42,9 @@ describe "Math" do
   should_parse_math "1.5 + 2.4"
 
   should_parse_math "-2 + -3"
+
+  should_parse_math "2^3"
+  should_parse_math "2^3 * 3^2^(1+1)"
 end
 
 describe "Math" do

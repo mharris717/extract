@@ -6,6 +6,14 @@ module Extract
           a.excel_value == b.excel_value
         elsif op.text_value == ">"
           a.excel_value > b.excel_value
+        elsif op.text_value == "<"
+          a.excel_value < b.excel_value
+        elsif op.text_value == ">="
+          a.excel_value >= b.excel_value
+        elsif op.text_value == "<="
+          a.excel_value <= b.excel_value
+        else
+          raise "bad"
         end
       end
 

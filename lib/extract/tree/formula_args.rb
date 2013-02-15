@@ -19,6 +19,7 @@ module Extract
 
         rest.elements.each do |e|
           arg = e.elements[1]
+          raise "no deps for arg #{arg.inspect}" unless arg.respond_to?(:deps)
           res << arg.deps
         end
 

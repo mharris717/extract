@@ -7,7 +7,14 @@ module Extract
       end
       def deps
         #raise "foo"
-        formula_args.deps
+        formula_args.deps.flatten.map do |f|
+          if f =~ /^-/
+            raise 'foo'
+            f[1..-1]
+          else
+            f
+          end
+        end.uniq
       end
       def tt
         :formula

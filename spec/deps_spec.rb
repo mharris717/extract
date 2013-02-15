@@ -43,4 +43,6 @@ describe "Deps" do
   should_have_deps "=SUM(A1,A2)","A1","A2"
   should_have_deps "=SUM(A1:B2)","A1","A2","B1","B2"
   should_have_deps "=SUM(A1,C1)","A1"
+
+  should_have_deps "=SUM(2+3+A1,A2)","A1","A2"
 end

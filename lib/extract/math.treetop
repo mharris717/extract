@@ -23,7 +23,7 @@ grammar MathMy
   end
 
   rule op
-    ("+" / "-" / "*" / "/") <Extract::Tree::Operator>
+    ("+" / "-" / "*" / "/" / "^") <Extract::Tree::Operator>
   end
 
   rule primary

@@ -1,12 +1,19 @@
 module Extract
   module Tree
     module Cell
+      def proper_cell
+        text_value.gsub("-","").gsub("$","")
+      end
+      def leading_neg?
+        text_value[0..0] == '-'
+      end
       def excel_value
-        if text_value[0..0] == '-'
-          res = (find_sheet[text_value[1..-1]].to_f || 0) * -1
-          res
+        res = find_sheet[proper_cell]
+        #raise proper_cell if text_value == "-A2"
+        if res.present?
+          leading_neg? ? res * -1 : res
         else
-          find_sheet[text_value]
+          res
         end
       end
       def row
@@ -16,7 +23,7 @@ module Extract
         c.text_value
       end
       def deps
-        [text_value]
+        [proper_cell]
       end
       def tt
         :cell

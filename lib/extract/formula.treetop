@@ -2,19 +2,17 @@ grammar Formula
   include MathMy
 
   rule top
-    "=" meat:(cond / formula / range / math_exp_full / cell / num)
+    "=" meat:(cond  / range / math_exp_full / formula / cell / num)
   end
 
   rule primary
     num / cell / formula
   end
 
-  rule calc_unit
-    formula  / cell
-  end
+ 
 
   rule cell
-    "-"? c:[A-Z] r:[0-9]+ <Extract::Tree::Cell>
+    "-"? "$"? c:[A-Z] "$"? r:[0-9]+ <Extract::Tree::Cell>
   end
 
   rule range
@@ -35,11 +33,11 @@ grammar Formula
   end 
 
   rule formula_name
-    "THING" / "DOUBLE" / "SUM" / "IF" / "MAX" / "VLOOKUP"
+    "THING" / "DOUBLE" / "SUM" / "IF" / "MAX" / "VLOOKUP" / "SQRT" / "COMBIN"
   end
 
   rule formula_arg
-    cond / formula / range / cell / num
+    cond / math_exp_full / formula / range / cell / num / string
   end
 
   rule formula_args
@@ -47,8 +45,12 @@ grammar Formula
   end
 
   rule cond_exp
-    a:(num / cell) op:("=" / ">") b:(num / cell) <Extract::Tree::CondExp>
+    a:(num / cell / string / formula / math_exp_full) op:(">=" / "<=" / "=" / ">" / "<") b:(num / cell / string / formula / math_exp_full) <Extract::Tree::CondExp>
   end
+
+  rule string
+    "\"" [^"]+ "\"" <Extract::Tree::String>
+  end 
 
   rule cond_const
     ("TRUE" / "FALSE") {

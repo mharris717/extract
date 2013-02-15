@@ -2,6 +2,8 @@ module Extract
   class Sheet
     include FromHash
     fattr(:cells) { {} }
+    fattr(:cache) { {} }
+    fattr(:loaded_values) { {} }
 
     def []=(c,val)
       self.cells[c] = val
@@ -10,10 +12,14 @@ module Extract
       res = cells[c]
       puts "doing #{c} #{res}"
       if res.to_s =~ /^=/
-        Extract::Parser.new(:str => res, :sheet => self).excel_value
+        self.cache[c] ||= Extract::Parser.new(:str => res, :sheet => self).excel_value
       else
         res
       end
+    end
+
+    def eval(str)
+      Extract::Parser.new(:str => str, :sheet => self).excel_value
     end
 
     def deps(c)
@@ -33,6 +39,12 @@ module Extract
       end
     end
 
+    def each_value_comp
+      loaded_values.each do |k,v|
+        yield k,cells[k],self[k],v
+      end
+    end
+
     class << self
       def load(file)
         w = Roo::Excelx.new(file)
@@ -47,7 +59,9 @@ module Extract
             else
               w.cell(row,col)
             end
+            loaded = w.cell(row,col)
             sheet["#{col}#{row}"] = val if val.present?
+            sheet.loaded_values["#{col}#{row}"] = loaded if loaded.present?
           end
         end
 
