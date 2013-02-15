@@ -3,6 +3,7 @@ end
 
 require 'mharris_ext'
 require 'treetop'
+require 'ostruct'
 
 require 'roo'
 
