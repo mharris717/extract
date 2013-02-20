@@ -1,0 +1,6 @@
+development:
+  sessions:
+    default:
+      database: extract_web
+      hosts:
+        - localhost:27017

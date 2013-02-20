@@ -26,6 +26,9 @@ Spork.prefork do
       !!Extract::Parser.new(:str => actual).result
     end
   end
+
+  f = File.expand_path(File.dirname(__FILE__)) + "/config/mongoid.yml"
+  Mongoid.load! f,'development'
 end
 
 Spork.each_run do

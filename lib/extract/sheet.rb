@@ -18,13 +18,17 @@ module Extract
       end
     end
 
+    def clear_cache!
+      self.cache = {}
+    end
+
     def eval(str)
       Extract::Parser.new(:str => str, :sheet => self).excel_value
     end
 
     def deps(c)
       res = cells[c]
-      if res.to_s =~ /^=/
+      res = if res.to_s =~ /^=/
         d = Extract::Parser.new(:str => res, :sheet => self).deps
         d.map do |dep|
           d2 = deps(dep)
@@ -37,6 +41,13 @@ module Extract
       else
         []
       end
+      res.flatten.uniq.map do |c|
+        if c =~ /"/
+          nil
+        else
+          c.gsub("$","")
+        end
+      end.select { |x| x }.sort.uniq
     end
 
     def each_value_comp
@@ -44,6 +55,7 @@ module Extract
         yield k,cells[k],self[k],v
       end
     end
+
 
     class << self
       def load(file)

@@ -4,6 +4,8 @@
       %th Cell
       %th Name
       %th Val
+      %th Deps
+      %th Formula
 
     - @sheet.each_input do |cell,name,val|
       %tr
@@ -15,13 +17,23 @@
     %tr
       %td _
 
-    - @sheet.each_output do |cell,name,val|
+    - @sheet.each_output do |cell,name,val,deps,formula|
       %tr
         %td= cell
         %td= name
         %td= val
+        %td= deps.join(",")
+        %td= formula
 
-  %input{:type => "Submit"}
+    
+    %tr
+      %td
+        %input{:type => "Submit"}
 
-
-  
+    - @sheet.each_other do |cell,formula,deps|
+      %tr
+        %td= cell
+        %td
+        %td
+        %td= deps.join(",")
+        %td= formula

@@ -24,8 +24,51 @@ module Extract
       res
     end
     fattr(:output_cells) { [] }
+
+    fattr(:dep_map) do
+      res = {}
+      output_cells.each do |output_cell|
+        res[output_cell] = sheet.deps(output_cell).flatten.uniq.map do |c|
+          if c =~ /"/
+            nil
+          else
+            c.gsub("$","")
+          end
+        end.select { |x| x }.sort.uniq
+      end
+      res
+    end
+
     fattr(:input_cells) do
-      output_cells.map { |x| sheet.deps(x) }.flatten.uniq.sort
+      dep_map.values.flatten.uniq.sort
+    end
+
+    def save!
+      res = Persist::Sheet.new
+
+      res.cells = {}
+      res.input_cells = []
+      res.output_cells = []
+
+      sheet.cells.each do |k,v|
+        res.cells[k] = v
+      end
+
+      input_cells.each do |c|
+        res.input_cells << c
+      end
+
+      output_cells.each do |c|
+        res.output_cells << c
+      end
+
+      res.save!
+
+      res
+    end
+
+    def [](c)
+      sheet[c]
     end
 
     def each_input
@@ -36,8 +79,24 @@ module Extract
 
     def each_output
       output_cells.sort.each do |cell|
-        yield cell, cell_names[cell],sheet[cell]
+        yield cell, cell_names[cell],sheet[cell],dep_map[cell],sheet.cells[cell]
       end
+    end
+
+    def each_other
+      res = []
+      bad = input_cells + output_cells
+      sheet.cells.each do |k,v|
+        if !bad.include?(k)
+          res << k
+        end
+      end
+
+      res.each do |c|
+        d = sheet.deps(c)
+        yield c,sheet.cells[c],d if sheet.cells[c].present? && d.size > 0
+      end
+
     end
 
     class << self

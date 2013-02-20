@@ -61,7 +61,13 @@ module Extract
       res.root_sheet = sheet
       #raise res.meat.inspect unless res.meat.respond_to?(:deps)
       raise "can't parse #{str}" unless res
-      res.meat.deps
+      res.meat.deps.flatten.uniq.map do |c|
+        if c =~ /"/
+          nil
+        else
+          c.gsub("$","")
+        end
+      end.select { |x| x }.sort.uniq
     end
   end
 end

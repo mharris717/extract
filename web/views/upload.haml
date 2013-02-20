@@ -1,0 +1,13 @@
+%form{:method => "post", :enctype => 'multipart/form-data', :action => "/upload"}
+  %input{:type => "file", :name => "sheet"}
+  %br
+  %input{:type => "input", :name => "output_cells"}
+  %br
+  %input{:type => "submit"}
+
+%br
+%br
+
+- Extract::Persist::Sheet.all.each do |sheet|
+  %a{:href => "/sheet/#{sheet.id}"} Sheet
+  %br

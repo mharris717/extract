@@ -3,8 +3,5 @@ module Extract
     include FromHash
     attr_accessor :filename
 
-    fattr(:) do
-
-    end
   end
 end

@@ -51,3 +51,5 @@ end
 puts sheet["E38"]
 #puts sheet.deps("B42").inspect
 end
+
+%w(B38 B41 B51 B52)

@@ -25,4 +25,20 @@ describe "Extract" do
 end
   
 end
+
+
+describe 'Dev Sheet' do
+  let(:sheet_def) do
+    Extract::SheetDefinition.load("/users/mharris717/code/orig/extract/samples/div.xlsx",output_cells)
+  end
+  let(:output_cells) do
+    %w(B38 B41 B51 B52)
+  end
+  it 'input cells' do
+    exp = ["B30", "B29", "B30", "B31", "B46", "B47", "C35", "D35", "E35", "F35", "G35", "H35", "I35", "J35", "K35", "L35", "M35"].sort.uniq
+    sheet_def.input_cells.sort.should == exp
+  end
+
+
+end
 end
