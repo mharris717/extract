@@ -28,7 +28,7 @@ Spork.prefork do
   end
 
   f = File.expand_path(File.dirname(__FILE__)) + "/config/mongoid.yml"
-  Mongoid.load! f,'development'
+  Mongoid.load! f,'test'
 end
 
 Spork.each_run do

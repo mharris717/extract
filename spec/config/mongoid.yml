@@ -4,3 +4,10 @@ development:
       database: mongoid_dev
       hosts:
         - localhost:27017
+test:
+  sessions:
+    default:
+      uri: mongodb://extract_test:extract_test@linus.mongohq.com:10038/extract_test
+      options:
+        skip_version_check: true
+        safe: true
