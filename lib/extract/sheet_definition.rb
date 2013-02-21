@@ -21,6 +21,12 @@ module Extract
         n = left(c)
         res[c] = sheet[n]
       end
+
+      each_other_basic do |c|
+        n = left(c)
+        res[c] = sheet[n]
+      end
+      
       res
     end
     fattr(:output_cells) { [] }
@@ -99,7 +105,7 @@ module Extract
       end
     end
 
-    def each_other
+    def each_other_basic
       res = []
       bad = input_cells + output_cells
       sheet.cells.each do |k,v|
@@ -110,9 +116,15 @@ module Extract
 
       res.each do |c|
         d = sheet.deps(c)
-        yield c,sheet.cells[c],d if sheet.cells[c].present? && d.size > 0
+        yield c if sheet.cells[c].present? && d.size > 0
       end
+    end
 
+    def each_other
+      each_other_basic do |c|
+        d = sheet.deps(c)
+        yield c,cell_names[c],sheet[c],sheet.cells[c],d
+      end
     end
 
     class << self
