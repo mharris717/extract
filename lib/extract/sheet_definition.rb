@@ -19,14 +19,16 @@ module Extract
       res = {}
       (input_cells + output_cells).each do |c|
         n = left(c)
-        res[c] = sheet[n]
+        res[c] = sheet[n] if !sheet[n].kind_of?(Numeric) && sheet[n].to_s.strip != '' && sheet[n].to_s.strip != 'N/A'
       end
 
       each_other_basic do |c|
         n = left(c)
-        res[c] = sheet[n]
+        res[c] = sheet[n] if !sheet[n].kind_of?(Numeric) && sheet[n].to_s.strip != '' && sheet[n].to_s.strip != 'N/A'
       end
-      
+
+
+
       res
     end
     fattr(:output_cells) { [] }
