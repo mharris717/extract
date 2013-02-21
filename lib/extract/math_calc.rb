@@ -33,7 +33,7 @@ module Extract
         #puts "eval, L #{l.class} #{l.inspect} #{str} R #{r.inspect}"
       raise exp if exp =~ /[a-z]/i
       res = eval(exp)
-      puts "evaled #{exp} to #{res}"
+      #puts "evaled #{exp} to #{res}"
       res
     end
     def to_s

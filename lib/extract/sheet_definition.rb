@@ -24,6 +24,15 @@ module Extract
       res
     end
     fattr(:output_cells) { [] }
+    def output_cells=(arr)
+      @output_cells = arr.map do |c|
+        if c =~ /:/
+          Extract::Tree::Range.cells_in_range(c)
+        else
+          c
+        end
+      end.flatten
+    end
 
     fattr(:dep_map) do
       res = {}
@@ -40,12 +49,14 @@ module Extract
     end
 
     fattr(:input_cells) do
-      dep_map.values.flatten.uniq.sort
+      output_cells.map do |c|
+        a = dep_map[c] || []
+        a = [c] if a.empty?
+        a
+      end.flatten.uniq.sort
     end
 
-    def save!
-      res = Persist::Sheet.new
-
+    def setup_persisted_sheet!(res=nil)
       res.cells = {}
       res.input_cells = []
       res.output_cells = []
@@ -62,8 +73,13 @@ module Extract
         res.output_cells << c
       end
 
-      res.save!
+      res
+    end
 
+    def save!(res=nil)
+      res ||= Persist::Sheet.new
+      setup_persisted_sheet! res
+      res.save!
       res
     end
 

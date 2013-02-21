@@ -8,7 +8,7 @@ module Extract
     end
     def if(c,a,b)
       res = c ? a : b
-      puts [c,a,b].inspect
+      #puts [c,a,b].inspect
       res
     end
     def max(*args)
@@ -31,7 +31,7 @@ module Extract
     end
 
     def combin(n,k)
-      puts "combin #{n} #{k}"
+      #puts "combin #{n} #{k}"
       n.fact / (k.fact * (n-k).fact)
     end
 

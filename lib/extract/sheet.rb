@@ -10,7 +10,7 @@ module Extract
     end
     def [](c)
       res = cells[c]
-      puts "doing #{c} #{res}"
+      #puts "doing #{c} #{res}"
       if res.to_s =~ /^=/
         self.cache[c] ||= Extract::Parser.new(:str => res, :sheet => self).excel_value
       else
