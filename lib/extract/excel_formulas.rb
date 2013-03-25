@@ -14,7 +14,7 @@ module Extract
     def max(*args)
       args.flatten.select { |x| x }.sort.reverse.first
     end
-    def vlookup(lookup_val,range,col_num)
+    def vlookup(lookup_val,range,col_num,*junk)
       range.each do |row|
         if row[0] == lookup_val
           return row[col_num-1]

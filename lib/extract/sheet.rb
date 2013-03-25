@@ -17,6 +17,9 @@ module Extract
         res
       end
     end
+    def raw_value(c)
+      cells[c]
+    end
 
     def clear_cache!
       self.cache = {}
@@ -78,6 +81,10 @@ module Extract
         end
 
         sheet
+      end
+
+      def inline(str)
+        InlineDef.new(:raw => str).sheet
       end
     end
 

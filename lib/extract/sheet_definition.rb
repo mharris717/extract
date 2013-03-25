@@ -3,6 +3,8 @@ module Extract
     include FromHash
     attr_accessor :sheet
 
+    fattr(:tables) { Tables.new(:sheet_def => self) }
+
     def prev_letter(letter)
       r = ("A".."Z").to_a
       raise "bad letter #{letter}" unless r.index(letter)
@@ -27,19 +29,11 @@ module Extract
         res[c] = sheet[n] if !sheet[n].kind_of?(Numeric) && sheet[n].to_s.strip != '' && sheet[n].to_s.strip != 'N/A'
       end
 
-
-
       res
     end
     fattr(:output_cells) { [] }
     def output_cells=(arr)
-      @output_cells = arr.map do |c|
-        if c =~ /:/
-          Extract::Tree::Range.cells_in_range(c)
-        else
-          c
-        end
-      end.flatten
+      @output_cells = Extract.expand_cells(arr).uniq
     end
 
     fattr(:dep_map) do
@@ -54,6 +48,20 @@ module Extract
         end.select { |x| x }.sort.uniq
       end
       res
+    end
+
+    def deps(cell,ops={})
+      raw = sheet.deps(cell)
+      if ops[:table]
+        res = []
+        raw.each do |c|
+          t = tables.for_cell(c)
+          res << (t || c)
+        end
+        res.uniq.sort
+      else
+        raw
+      end
     end
 
     fattr(:input_cells) do
@@ -93,6 +101,9 @@ module Extract
 
     def [](c)
       sheet[c]
+    end
+    def raw_value(c)
+      sheet.cells[c]
     end
 
     def each_input

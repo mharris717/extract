@@ -57,6 +57,9 @@ grammar Formula
       def excel_value
         (text_value == "TRUE") ? true : false
       end
+      def deps
+        []
+      end
     }
   end
 

@@ -26,7 +26,7 @@ class Numeric
   end
 end
 
-%w(parser sheet excel_formulas math_calc sheet_definition).each do |f|
+%w(parser sheet excel_formulas math_calc sheet_definition cell inline_def table tables).each do |f|
   load File.expand_path(File.dirname(__FILE__)) + "/extract/#{f}.rb"
 end
 
@@ -36,4 +36,22 @@ end
 
 %w(sheet).each do |f|
   load File.expand_path(File.dirname(__FILE__)) + "/extract/persist/#{f}.rb"
+end
+
+%w(ddl table).each do |f|
+  load File.expand_path(File.dirname(__FILE__)) + "/extract/export/#{f}.rb"
+end
+
+module Extract
+  class << self
+    def expand_cells(*arr)
+      arr.flatten.map do |c|
+        if c =~ /:/
+          Extract::Tree::Range.cells_in_range(c)
+        else
+          c
+        end
+      end.flatten
+    end
+  end
 end
