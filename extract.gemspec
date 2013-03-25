@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mike Harris"]
-  s.date = "2013-02-21"
+  s.date = "2013-03-25"
   s.description = "extract"
   s.email = "mharris717@gmail.com"
   s.extra_rdoc_files = [
@@ -29,8 +29,12 @@ Gem::Specification.new do |s|
     "VERSION",
     "extract.gemspec",
     "lib/extract.rb",
+    "lib/extract/cell.rb",
     "lib/extract/excel_formulas.rb",
+    "lib/extract/export/ddl.rb",
+    "lib/extract/export/table.rb",
     "lib/extract/formula.treetop",
+    "lib/extract/inline_def.rb",
     "lib/extract/math.treetop",
     "lib/extract/math_calc.rb",
     "lib/extract/parser.rb",
@@ -38,6 +42,8 @@ Gem::Specification.new do |s|
     "lib/extract/sheet.rb",
     "lib/extract/sheet_comp.rb",
     "lib/extract/sheet_definition.rb",
+    "lib/extract/table.rb",
+    "lib/extract/tables.rb",
     "lib/extract/tree/base.rb",
     "lib/extract/tree/cell.rb",
     "lib/extract/tree/cond_exp.rb",
@@ -50,15 +56,20 @@ Gem::Specification.new do |s|
     "lib/extract/tree/string.rb",
     "samples/baseball.xlsx",
     "samples/div.xlsx",
+    "samples/salescalls.xlsx",
+    "spec/cell_spec.rb",
     "spec/config/mongoid.yml",
     "spec/deps_spec.rb",
+    "spec/export/table_spec.rb",
     "spec/extract_spec.rb",
+    "spec/inline_def_spec.rb",
     "spec/math_spec.rb",
     "spec/parser_spec.rb",
     "spec/persist_spec.rb",
     "spec/sheet_definition_spec.rb",
     "spec/sheet_spec.rb",
     "spec/spec_helper.rb",
+    "spec/table_spec.rb",
     "vol/excel_test.rb",
     "vol/parse_test.rb",
     "vol/scratch.rb",
