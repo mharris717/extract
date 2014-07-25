@@ -10,7 +10,7 @@ module Extract
       end
 
       def quoted_col(col)
-        return col
+        #return col
         if col.to_s[0..0] =~ /\d/
           "\"#{col}\""
         else

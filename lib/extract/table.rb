@@ -1,6 +1,7 @@
 module Extract
   class Row
     include FromHash
+    include Enumerable
     attr_accessor :table, :cells
 
     fattr(:value_hash) do
