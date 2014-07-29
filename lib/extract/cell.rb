@@ -30,5 +30,11 @@ module Extract
     def col
       rc[0]
     end
+
+    class << self
+      def address?(cell)
+        !!(cell =~ /^([A-Z]+)([0-9]+)$/)
+      end
+    end
   end
 end

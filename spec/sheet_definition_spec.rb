@@ -44,3 +44,28 @@ describe "SheetDefinition" do
     end
   end
 end
+
+describe "cell names" do
+  let(:sheet) do
+    res = Extract::Sheet.new
+    
+    res["A1"] = "PA"
+    res["B1"] = 4
+    res["B2"] = "=B1*2"
+   
+    res
+  end
+  let(:sheet_def) do
+    Extract::SheetDefinition.new(:sheet => sheet, :output_cells => output_cells)
+  end
+  let(:output_cells) { ["B2"] }
+
+  it 'get value by name' do
+    sheet_def.cell_names["PA"].should == 4
+  end
+
+  it 'set value by name' do
+    sheet_def.cell_names["PA"] = 8
+    sheet['B1'].should == 8
+  end
+end

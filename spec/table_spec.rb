@@ -30,11 +30,11 @@ EOF
   end
 
   it 'reg deps' do
-    sheet_def.deps('B8').sort.should == Extract.expand_cells("A2:B6","A8").sort
+    sheet_def.deps.deps('B8').sort.should == Extract.expand_cells("A2:B6","A8").sort
   end
  
   it 'table deps' do
-    sheet_def.deps('B8', :table => true).sort.should == %w(nums A8).sort
+    sheet_def.deps.deps('B8', :table => true).sort.should == %w(nums A8).sort
   end
 
   describe "table obj" do

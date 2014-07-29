@@ -8,6 +8,7 @@ require 'ostruct'
 require 'roo'
 
 require 'mongoid'
+require 'slop'
 
 class Object
   def blank?
@@ -26,7 +27,7 @@ class Numeric
   end
 end
 
-%w(parser sheet excel_formulas math_calc sheet_definition cell inline_def table tables).each do |f|
+%w(parser sheet excel_formulas math_calc sheet_definition cell inline_def table tables command_line_run).each do |f|
   load File.expand_path(File.dirname(__FILE__)) + "/extract/#{f}.rb"
 end
 
@@ -40,6 +41,10 @@ end
 
 %w(ddl table).each do |f|
   load File.expand_path(File.dirname(__FILE__)) + "/extract/export/#{f}.rb"
+end
+
+%w(deps cell_names).each do |f|
+  load File.expand_path(File.dirname(__FILE__)) + "/extract/def_pieces/#{f}.rb"
 end
 
 module Extract

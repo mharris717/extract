@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+load File.dirname(__FILE__) + "/../lib/extract.rb"
+
+run = Extract::CommandLineRun.new(raw_options: ARGV)
+puts run.result

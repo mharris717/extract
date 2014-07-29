@@ -105,4 +105,5 @@ DEPENDENCIES
   rdoc (~> 3.12)
   roo
   rspec (~> 2.8.0)
+  slop
   treetop

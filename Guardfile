@@ -4,7 +4,7 @@
 
 
 
-guard 'rspec', :cli => "--drb" do
+guard 'rspec', :cli => "--drb --drb-port 8337" do
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$})   { "spec" } # { |m| "spec/lib/#{m[1]}_spec.rb" }
   watch(%r{^lib/(.+)\.treetop$})   { "spec" }
@@ -14,7 +14,7 @@ end
 
 
 
-guard 'spork' do
+guard 'spork', rspec_port: 8337 do
   watch('config/application.rb')
   watch('config/environment.rb')
   watch('config/environments/test.rb')
@@ -25,3 +25,5 @@ guard 'spork' do
   watch('test/test_helper.rb') { :test_unit }
   watch(%r{features/support/}) { :cucumber }
 end
+
+

@@ -29,3 +29,4 @@ gem 'roo'
 
 gem 'rb-fsevent', '~> 0.9.1'
 gem 'mongoid'
+gem 'slop'

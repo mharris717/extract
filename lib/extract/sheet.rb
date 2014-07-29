@@ -29,6 +29,12 @@ module Extract
       Extract::Parser.new(:str => str, :sheet => self).excel_value
     end
 
+    def cells_with_values
+      res = []
+      cells.each { |k,v| res << k if v.present? }
+      res
+    end
+
     def deps(c)
       res = cells[c]
       res = if res.to_s =~ /^=/
