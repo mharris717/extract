@@ -23,7 +23,11 @@ module Extract
     end
 
     def [](c)
-      tables[c]
+      if c.to_s == 'all'
+        Table.new(:cell_range => "A1:D100", :name => "all", :sheet_def => sheet_def)
+      else
+        tables[c]
+      end
     end
     def each(&b)
       tables.each(&b)

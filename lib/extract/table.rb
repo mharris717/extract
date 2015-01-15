@@ -1,6 +1,7 @@
 module Extract
   class Row
     include FromHash
+    include Enumerable
     attr_accessor :table, :cells
 
     fattr(:value_hash) do
@@ -19,6 +20,10 @@ module Extract
 
     def each(&b)
       value_hash.each(&b)
+    end
+
+    def present?
+      value_hash.values.any? { |x| x.present? }
     end
   end
   class Table
@@ -45,9 +50,8 @@ module Extract
       cell_row_hash[k].map { |x| x.value }
     end
 
-
     def rows
-      cell_row_hash.values[1..-1].map { |a| Row.new(:table => self, :cells => a) }
+      cell_row_hash.values[1..-1].map { |a| Row.new(:table => self, :cells => a) }.select { |x| x.present? }
     end
 
     def sql_statements

@@ -26,21 +26,29 @@ class Numeric
   end
 end
 
-%w(parser sheet excel_formulas math_calc sheet_definition cell inline_def table tables).each do |f|
-  load File.expand_path(File.dirname(__FILE__)) + "/extract/#{f}.rb"
+module Extract
+  class << self
+    def load!
+      %w(parser sheet excel_formulas math_calc sheet_definition cell inline_def table tables).each do |f|
+        load File.expand_path(File.dirname(__FILE__)) + "/extract/#{f}.rb"
+      end
+
+      %w(base range cond_exp formula formula_args math num cell operator string).each do |f|
+        load File.expand_path(File.dirname(__FILE__)) + "/extract/tree/#{f}.rb"
+      end
+
+      %w(sheet).each do |f|
+        load File.expand_path(File.dirname(__FILE__)) + "/extract/persist/#{f}.rb"
+      end
+
+      %w(ddl table).each do |f|
+        load File.expand_path(File.dirname(__FILE__)) + "/extract/export/#{f}.rb"
+      end
+    end
+  end
 end
 
-%w(base range cond_exp formula formula_args math num cell operator string).each do |f|
-  load File.expand_path(File.dirname(__FILE__)) + "/extract/tree/#{f}.rb"
-end
-
-%w(sheet).each do |f|
-  load File.expand_path(File.dirname(__FILE__)) + "/extract/persist/#{f}.rb"
-end
-
-%w(ddl table).each do |f|
-  load File.expand_path(File.dirname(__FILE__)) + "/extract/export/#{f}.rb"
-end
+Extract.load!
 
 module Extract
   class << self

@@ -141,9 +141,9 @@ module Extract
     end
 
     class << self
-      def load(file,output)
+      def load(file,output,sheet_name=nil)
         res = new
-        res.sheet = Sheet.load(file)
+        res.sheet = Sheet.load(file,sheet_name)
         res.output_cells = output
         res
       end

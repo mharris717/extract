@@ -61,18 +61,19 @@ module Extract
 
 
     class << self
-      def load(file)
+      def load(file,sheet_name=nil)
         w = Roo::Excelx.new(file)
-        w.default_sheet = w.sheets.first
+        w.default_sheet = sheet_name || w.sheets.first
 
         sheet = Extract::Sheet.new
 
         ("A".."Z").each do |col|
           (1..100).each do |row|
-            val = if w.formula?(row,col)
+            cell_text = w.cell(row,col)
+            val = if cell_text.present? && w.formula?(row,col)
               "=" + w.formula(row,col).gsub(" ","")
             else
-              w.cell(row,col)
+              cell_text
             end
             loaded = w.cell(row,col)
             sheet["#{col}#{row}"] = val if val.present?

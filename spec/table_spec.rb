@@ -65,3 +65,28 @@ EOF
 
   end
 end
+
+describe 'table - all' do
+  let(:sheet) do
+    doc = <<EOF
+    num squared
+    1 1
+    2 4
+    3 9
+    4 16
+    5 25
+EOF
+    Extract::Sheet.inline(doc)
+  end
+
+  let(:sheet_def) do
+    Extract::SheetDefinition.new(:sheet => sheet)
+  end
+
+  let(:table) do
+    sheet_def.tables['all']
+  end
+  it 'has rows' do
+    table.rows.size.should == 5
+  end
+end
