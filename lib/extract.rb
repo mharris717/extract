@@ -7,8 +7,6 @@ require 'ostruct'
 
 require 'roo'
 
-require 'mongoid'
-
 class Object
   def blank?
     to_s.strip == ""
@@ -38,7 +36,7 @@ module Extract
       end
 
       %w(sheet).each do |f|
-        load File.expand_path(File.dirname(__FILE__)) + "/extract/persist/#{f}.rb"
+        # load File.expand_path(File.dirname(__FILE__)) + "/extract/persist/#{f}.rb"
       end
 
       %w(ddl table).each do |f|

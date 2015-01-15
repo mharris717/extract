@@ -1,3 +1,5 @@
+require 'mongoid'
+
 module Extract
   module Persist
     class Sheet
