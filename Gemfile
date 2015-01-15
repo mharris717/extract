@@ -17,6 +17,8 @@ group :development do
   gem 'guard-spork'
 
   gem 'lre'
+
+  gem 'mongoid'
 end
 
 
@@ -28,4 +30,3 @@ gem 'treetop'
 gem 'roo'
 
 gem 'rb-fsevent', '~> 0.9.1'
-gem 'mongoid'
