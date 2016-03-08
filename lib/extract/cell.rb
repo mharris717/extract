@@ -20,15 +20,17 @@ module Extract
       sheet_def.cell_names[cell]
     end
 
-    def rc
+    def cr
       raise "foo" unless cell =~ /^([A-Z]+)([0-9]+)$/
-      [$1,$2]
+      res = [$1,$2.to_i]
+      raise "bad rc #{res.inspect}" unless res[1] >= 1
+      res
     end
     def row
-      rc[1].to_i
+      cr[1].to_i
     end
     def col
-      rc[0]
+      cr[0]
     end
   end
 end

@@ -17,21 +17,7 @@ module Extract
     def starting_at(cell)
       tables["starting_at_#{cell}"] || make_starting_at(cell)
     end
-
-    fattr(:cell_map) do
-      res = {}
-      tables.each do |name,table|
-        table.cells.each do |c|
-          res[c] = name
-        end
-      end
-      res
-    end
-
-    def for_cell(c)
-      cell_map[c]
-    end
-
+    
     def [](c)
       if c.to_s == 'all'
         Table.new(:cell_range => "A1:D100", :name => "all", :sheet_def => sheet_def)

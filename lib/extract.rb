@@ -25,7 +25,7 @@ end
 module Extract
   class << self
     def load!
-      %w(sheet sheet_definition cell inline_def table tables tree/range read).each do |f|
+      %w(sheet sheet_definition cell inline_def table tables tree/range read table/find table/row).each do |f|
         load File.expand_path(File.dirname(__FILE__)) + "/extract/#{f}.rb"
       end
     end
@@ -55,8 +55,7 @@ module Extract
       r[i]
     end
     def move_cell(c,row_i,col_i)
-      col = c[0..0]
-      row = c[1..-1]
+      col,row = *Cell.new(cell: c).cr
       col = move_letter(col,col_i)
       row = row.to_i + row_i
       "#{col}#{row}"
