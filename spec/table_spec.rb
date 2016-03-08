@@ -47,6 +47,19 @@ EOF
       table.field_names.should == %w(num squared)
     end
   end
+
+  describe "no headers" do
+    let(:table) do
+      Extract::Table::WithoutHeaders.new(sheet_def: sheet_def, cell_range: "A2:B6")
+    end
+
+    it "smoke" do
+      table.rows.size.should == 5
+      table.rows[1].tap do |row|
+        row.value_hash.should == [2,4]
+      end
+    end
+  end
 end
 
 describe 'table - all' do

@@ -7,7 +7,7 @@ describe "Read" do
   # end
   it "smoke" do
     rows = []
-    Extract.foreach("samples/squared.xlsx") do |row|
+    Extract.foreach("samples/squared.xlsx", headers: true) do |row|
       rows << row
     end
     rows.size.should == 5
@@ -19,7 +19,7 @@ describe "Read" do
 
   it "other sheet" do
     rows = []
-    Extract.foreach("samples/squared.xlsx", sheet: "Sheet2", starting_cell: "C4") do |row|
+    Extract.foreach("samples/squared.xlsx", headers: true, sheet: "Sheet2", starting_cell: "C4") do |row|
       rows << row
     end
     #rows.each { |x| puts x.inspect }
@@ -30,9 +30,9 @@ describe "Read" do
     end
   end
 
-  it "end cel" do
+  it "end cell" do
     rows = []
-    Extract.foreach("samples/squared.xlsx", sheet: "Sheet2", starting_cell: "C4", ending_cell: "C6") do |row|
+    Extract.foreach("samples/squared.xlsx", headers: true, sheet: "Sheet2", starting_cell: "C4", ending_cell: "C6") do |row|
       rows << row
     end
     rows.size.should == 2
@@ -40,5 +40,15 @@ describe "Read" do
       row.keys.should == %w(num)
       row['num'].should == 2
     end
+  end
+
+  it "no headers" do
+    rows = []
+    Extract.foreach("samples/squared.xlsx") do |row|
+      rows << row
+    end
+    rows.size.should == 6
+    rows[0].should == %w(num squared)
+    rows[2].should == [2,4]
   end
 end

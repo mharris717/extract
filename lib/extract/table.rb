@@ -18,14 +18,29 @@ module Extract
       end
       res
     end
+  end
 
-    fattr(:field_names) do
-      k = cell_row_hash.keys.min
-      cell_row_hash[k].map { |x| x.value }
+  class Table
+    class WithHeaders < Table
+      fattr(:field_names) do
+        k = cell_row_hash.keys.min
+        cell_row_hash[k].map { |x| x.value }
+      end
+
+      fattr(:rows) do
+        cell_row_hash.values[1..-1].map { |a| Row.new(:table => self, :cells => a) }.select { |x| x.present? }
+      end
     end
 
-    fattr(:rows) do
-      cell_row_hash.values[1..-1].map { |a| Row.new(:table => self, :cells => a) }.select { |x| x.present? }
+    class WithoutHeaders < Table
+      fattr(:raw_rows) do
+        cell_row_hash.values.map do |row|
+          row.map { |x| x.value }
+        end
+      end
+      fattr(:rows) do
+        raw_rows.map { |x| OpenStruct.new(value_hash: x) }
+      end
     end
   end
 end

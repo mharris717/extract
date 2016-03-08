@@ -4,23 +4,24 @@ module Extract
     attr_accessor :sheet_def
     fattr(:tables) { {} }
 
-    def add(name,range)
-      self.tables[name] = Table.new(:cell_range => range, :name => name, :sheet_def => sheet_def)
+    def add(name,range,ops={})
+      cls = (ops[:headers] != false) ? Table::WithHeaders : Table::WithoutHeaders
+      self.tables[name] = cls.new(:cell_range => range, :name => name, :sheet_def => sheet_def)
     end
 
-    def make_starting_at(cell)
+    def make_starting_at(cell,ops={})
       find = Table::Find.new(sheet_def: sheet_def, start_cell: cell)
       name = "starting_at_#{cell}"
-      add name, find.range
+      add name, find.range,ops
     end
 
-    def starting_at(cell)
-      tables["starting_at_#{cell}"] || make_starting_at(cell)
+    def starting_at(cell,ops={})
+      tables["starting_at_#{cell}"] || make_starting_at(cell,ops)
     end
-    
+
     def [](c)
       if c.to_s == 'all'
-        Table.new(:cell_range => "A1:D100", :name => "all", :sheet_def => sheet_def)
+        Table::WithHeaders.new(:cell_range => "A1:D100", :name => "all", :sheet_def => sheet_def)
       else
         tables[c]
       end
