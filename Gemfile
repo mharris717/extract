@@ -17,16 +17,9 @@ group :development do
   gem 'guard-spork'
 
   gem 'lre'
-
-  gem 'mongoid'
+  gem 'rb-fsevent', '~> 0.9.1'
 end
 
-
-
 gem 'mharris_ext'
-gem 'treetop'
-
-
 gem 'roo'
 
-gem 'rb-fsevent', '~> 0.9.1'

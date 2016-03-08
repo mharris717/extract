@@ -16,25 +16,11 @@ Spork.prefork do
   # Requires supporting files with custom matchers and macros, etc,
   # in ./support/ and its subdirectories.
   Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
-
-  RSpec.configure do |config|
-    
-  end
-
-  RSpec::Matchers.define :parse do
-    match do |actual|
-      !!Extract::Parser.new(:str => actual).result
-    end
-  end
-
-  f = File.expand_path(File.dirname(__FILE__)) + "/config/mongoid.yml"
-  Mongoid.load! f,'test'
 end
 
 Spork.each_run do
   load File.expand_path(File.dirname(__FILE__)) + "/../lib/extract.rb"
   # This code will be run each time you run your specs.
-
 end
 
 # --- Instructions ---

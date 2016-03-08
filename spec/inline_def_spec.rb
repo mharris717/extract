@@ -22,6 +22,6 @@ EOF
   end
 
   it 'smoke' do
-    sheet['B8'].should == 4.0
+    sheet['B3'].should == 4.0
   end
 end

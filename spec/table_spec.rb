@@ -22,19 +22,7 @@ EOF
   end
 
   it 'smoke' do
-    sheet['B8'].should == 4
-  end
-
-  it 'smoke2' do
-    sheet.deps('B8').sort.should == Extract.expand_cells("A2:B6","A8").sort
-  end
-
-  it 'reg deps' do
-    sheet_def.deps('B8').sort.should == Extract.expand_cells("A2:B6","A8").sort
-  end
- 
-  it 'table deps' do
-    sheet_def.deps('B8', :table => true).sort.should == %w(nums A8).sort
+    sheet['B3'].should == 4
   end
 
   describe "table obj" do
@@ -58,11 +46,6 @@ EOF
     it 'field names' do
       table.field_names.should == %w(num squared)
     end
-
-    it 'sql statements' do
-      table.sql_statements.size.should == 6
-    end
-
   end
 end
 
@@ -88,5 +71,88 @@ EOF
   end
   it 'has rows' do
     table.rows.size.should == 5
+  end
+end
+
+describe 'table - starting at' do
+  let(:sheet) do
+    doc = <<EOF
+    num squared
+    1 1
+    2 4
+    3 9
+    4 16
+    5 25
+EOF
+    Extract::Sheet.inline(doc)
+  end
+
+  let(:sheet_def) do
+    Extract::SheetDefinition.new(:sheet => sheet)
+  end
+
+  let(:table) do
+    sheet_def.tables.starting_at("A1")
+  end
+  it 'has rows' do
+    table.rows.size.should == 5
+    table.rows[1]['squared'].should == 4
+  end
+end
+
+describe "find table" do
+  let(:sheet) do
+    doc = <<EOF
+
+    num squared
+    1 1
+    2 4
+    3 9
+    4 16
+    5 25
+
+
+EOF
+    Extract::Sheet.inline(doc)
+  end
+
+  let(:sheet_def) do
+    Extract::SheetDefinition.new(:sheet => sheet)
+  end
+
+  it "find" do
+    find = Extract::Table::Find.new(sheet_def: sheet_def, start_cell: "A1")
+    find.end_col.should == "B"
+    find.end_cell.should == "B6"
+  end
+end
+
+describe "find table" do
+  let(:sheet) do
+    doc = <<EOF
+    a b
+    1 2
+    3 4
+
+    num squared z
+    1 1
+    2 4 4
+    3 9
+    4 16
+    5 25
+
+
+EOF
+    Extract::Sheet.inline(doc)
+  end
+
+  let(:sheet_def) do
+    Extract::SheetDefinition.new(:sheet => sheet)
+  end
+
+  it "find" do
+    find = Extract::Table::Find.new(sheet_def: sheet_def, start_cell: "A5")
+    find.end_col.should == "C"
+    find.end_cell.should == "C10"
   end
 end

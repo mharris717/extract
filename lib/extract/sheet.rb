@@ -2,63 +2,16 @@ module Extract
   class Sheet
     include FromHash
     fattr(:cells) { {} }
-    fattr(:cache) { {} }
-    fattr(:loaded_values) { {} }
 
     def []=(c,val)
       self.cells[c] = val
     end
     def [](c)
-      res = cells[c]
-      #puts "doing #{c} #{res}"
-      if res.to_s =~ /^=/
-        self.cache[c] ||= Extract::Parser.new(:str => res, :sheet => self).excel_value
-      else
-        res
-      end
+      cells[c]
     end
     def raw_value(c)
       cells[c]
     end
-
-    def clear_cache!
-      self.cache = {}
-    end
-
-    def eval(str)
-      Extract::Parser.new(:str => str, :sheet => self).excel_value
-    end
-
-    def deps(c)
-      res = cells[c]
-      res = if res.to_s =~ /^=/
-        d = Extract::Parser.new(:str => res, :sheet => self).deps
-        d.map do |dep|
-          d2 = deps(dep)
-          if d2.empty?
-            dep
-          else
-            d2
-          end
-        end.flatten
-      else
-        []
-      end
-      res.flatten.uniq.map do |c|
-        if c =~ /"/
-          nil
-        else
-          c.gsub("$","")
-        end
-      end.select { |x| x }.sort.uniq
-    end
-
-    def each_value_comp
-      loaded_values.each do |k,v|
-        yield k,cells[k],self[k],v
-      end
-    end
-
 
     class << self
       def load(file,sheet_name=nil)
@@ -70,14 +23,7 @@ module Extract
         ("A".."Z").each do |col|
           (1..100).each do |row|
             cell_text = w.cell(row,col)
-            val = if cell_text.present? && w.formula?(row,col)
-              "=" + w.formula(row,col).gsub(" ","")
-            else
-              cell_text
-            end
-            loaded = w.cell(row,col)
-            sheet["#{col}#{row}"] = val if val.present?
-            sheet.loaded_values["#{col}#{row}"] = loaded if loaded.present?
+            sheet["#{col}#{row}"] = cell_text if cell_text.present?
           end
         end
 

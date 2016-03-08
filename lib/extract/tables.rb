@@ -8,6 +8,16 @@ module Extract
       self.tables[name] = Table.new(:cell_range => range, :name => name, :sheet_def => sheet_def)
     end
 
+    def make_starting_at(cell)
+      find = Table::Find.new(sheet_def: sheet_def, start_cell: cell)
+      name = "starting_at_#{cell}"
+      add name, find.range
+    end
+
+    def starting_at(cell)
+      tables["starting_at_#{cell}"] || make_starting_at(cell)
+    end
+
     fattr(:cell_map) do
       res = {}
       tables.each do |name,table|

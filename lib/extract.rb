@@ -2,9 +2,7 @@ module Extract
 end
 
 require 'mharris_ext'
-require 'treetop'
 require 'ostruct'
-
 require 'roo'
 
 class Object
@@ -27,20 +25,8 @@ end
 module Extract
   class << self
     def load!
-      %w(parser sheet excel_formulas math_calc sheet_definition cell inline_def table tables).each do |f|
+      %w(sheet sheet_definition cell inline_def table tables tree/range read).each do |f|
         load File.expand_path(File.dirname(__FILE__)) + "/extract/#{f}.rb"
-      end
-
-      %w(base range cond_exp formula formula_args math num cell operator string).each do |f|
-        load File.expand_path(File.dirname(__FILE__)) + "/extract/tree/#{f}.rb"
-      end
-
-      %w(sheet).each do |f|
-        # load File.expand_path(File.dirname(__FILE__)) + "/extract/persist/#{f}.rb"
-      end
-
-      %w(ddl table).each do |f|
-        load File.expand_path(File.dirname(__FILE__)) + "/extract/export/#{f}.rb"
       end
     end
   end
@@ -58,6 +44,22 @@ module Extract
           c
         end
       end.flatten
+    end
+  end
+
+  class << self
+    def move_letter(letter,i)
+      r = ("A".."Z").to_a
+      raise "bad letter #{letter}" unless r.index(letter)
+      i = r.index(letter) + i
+      r[i]
+    end
+    def move_cell(c,row_i,col_i)
+      col = c[0..0]
+      row = c[1..-1]
+      col = move_letter(col,col_i)
+      row = row.to_i + row_i
+      "#{col}#{row}"
     end
   end
 end

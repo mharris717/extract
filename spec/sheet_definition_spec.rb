@@ -15,32 +15,12 @@ describe "SheetDefinition" do
     res
   end
   let(:sheet_def) do
-    Extract::SheetDefinition.new(:sheet => sheet, :output_cells => output_cells)
+    Extract::SheetDefinition.new(:sheet => sheet)
   end
 
   describe "simple" do
-    let(:output_cells) { %w(F1) }
     it 'has inputs' do
-      sheet_def.input_cells.should == %w(A1 A2)
-    end
-  end
- 
-  describe "output cell without formula becomes input" do
-    let(:output_cells) { %w(F1 A3) }
-    it 'has inputs' do
-      sheet_def.input_cells.sort.should == %w(A1 A2 A3)
-    end
-  end
-
-  describe "output range" do
-    let(:output_cells) { %w(D1:G1) }
-
-    it 'sets output correctly' do
-      sheet_def.output_cells.should == %w(D1 E1 F1 G1)
-    end
-
-    it 'has input' do
-      sheet_def.input_cells.sort.should == %w(A1 A2 A3)
+      sheet_def['A1'].should == 1
     end
   end
 end
